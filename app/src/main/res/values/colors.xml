@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="field">#7A3CE8</color>
+    <color name="field_border">#3CE867</color>
+    <color name="sensor_filled">#708AEA1C</color>
+
+    <color name="color_text">#242925</color>
+</resources>

@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">AgricultureGIS</string>
+    <string name="create_field">Создать поле</string>
+    <string name="mainFragment">Главная</string>
+    <string name="load_field">Создать поле</string>
+    <string name="proceed">Далее</string>
+    <string name="calculate">Произвести расчет</string>
+    <string name="chooseSensor">Выберите тип датчика</string>
+    <string name="chooseSituation">Выберите обстановку</string>
+    <string name="choose_culture">Выберите культуру</string>
+    <string name="culture">Культура:</string>
+    <string name="season">Погодный сезон:</string>
+    <string name="sensor">Датчик:</string>
+    <string name="results">Результаты исследования</string>
+    <string name="evapo">Эвапотранспорация (ETo)</string>
+    <string name="atm_pressure">Атмосферное давление (P)</string>
+    <string name="pureRadiation">Чистая радиация (P)</string>
+    <string name="ok">Хорошо</string>
+
+    <string-array name="sensor_types">
+        <item>KaipoBase (радиус 3 км)</item>
+        <item>Thetaprobe (радиус 1 км)</item>
+    </string-array>
+
+    <string-array name="situation_types">
+        <item>Лето (от10 до 30 С)</item>
+        <item>Весна (от -5 до 10 С)</item>
+        <item>Зима (от -20 до 10 С)</item>
+        <item>Осень (от -10 до 20 С)</item>
+    </string-array>
+
+    <string-array name="culture_types">
+        <item>Яровая пшеница</item>
+        <item>Яровой ячмень</item>
+        <item>Яровой рапс</item>
+        <item>Пивной ячмень</item>
+        <item>Соя</item>
+        <item>Овощи</item>
+        <item>Виноград</item>
+    </string-array>
+</resources>

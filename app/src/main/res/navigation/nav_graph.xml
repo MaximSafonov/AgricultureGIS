@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.safonov.agriculturegis.view.FragmentMain"
+        android:label="@string/mainFragment"
+        tool:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_main_to_create_field"
+            app:destination="@id/createField" />
+        <action
+            android:id="@+id/action_main_to_field"
+            app:destination="@id/fieldActivity" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createField"
+        android:name="com.safonov.agriculturegis.view.FragmentCreateField"
+        android:label="@string/create_field"
+        tool:layout="@layout/fragment_create_field">
+        <action
+            android:id="@+id/action_create_to_field"
+            app:destination="@id/fieldActivity" />
+        <argument
+            android:name="culture"
+            app:argType="string"/>
+    </fragment>
+
+    <activity
+        android:id="@+id/fieldActivity"
+        android:name="com.safonov.agriculturegis.view.FieldActivity"
+        android:label="@string/create_field"
+        tool:layout="@layout/fragment_create_field">
+        <argument
+            android:name="culture"
+            app:argType="string"/>
+        <argument
+            android:name="sensor"
+            app:argType="string"/>
+        <argument
+            android:name="season"
+            app:argType="string"/>
+    </activity>
+
+</navigation>
