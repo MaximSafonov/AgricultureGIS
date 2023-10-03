@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.safonov.agriculturegis.R
+import com.safonov.agriculturegis.app.AgricultureApp
+import com.safonov.agriculturegis.data.db.PrePopulateData
 import com.safonov.agriculturegis.data.models.Season
 import com.safonov.agriculturegis.databinding.ActivityFieldBinding
 import com.safonov.agriculturegis.viewmodel.FieldViewModel
@@ -20,7 +22,7 @@ import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
 
-class FieldActivity: AppCompatActivity() {
+class FieldActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFieldBinding
     private lateinit var mapView: MapView
     private lateinit var mapObjects: MapObjectCollection
@@ -44,6 +46,16 @@ class FieldActivity: AppCompatActivity() {
         Point(46.926036, 39.111988),
     )
 
+    private val zernogradPointSensor1 = Point(46.888350, 40.554837)
+    private val zernogradPointSensor2 = Point(46.881874, 40.555058)
+    private val zernogradPointSensor3 = Point(46.874073, 40.555224)
+    private val zernogradPointSensor4 = Point(46.866535, 40.555113)
+
+    private val dubovskyPointSensor1 = Point(47.602353, 42.660383)
+    private val dubovskyPointSensor2 = Point(47.601863, 42.674771)
+    private val dubovskyPointSensor3 = Point(47.597000, 42.660024)
+    private val dubovskyPointSensor4 = Point(47.596270, 42.674927)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFieldBinding.inflate(layoutInflater)
@@ -56,15 +68,21 @@ class FieldActivity: AppCompatActivity() {
         binding.sensor.text = args.sensor
 
         mapObjects = mapView.map.mapObjects.addCollection()
+
+
         mapObjects.addPolygon(
-            Polygon(LinearRing(azovFieldPoints), ArrayList())
+            Polygon(
+                LinearRing(
+                    PrePopulateData.getProperFieldPoints(args.fieldId)
+                ), ArrayList()
+            )
         ).apply {
             fillColor = R.color.field
             strokeColor = R.color.field_border
             strokeWidth = 10F
         }
 
-        placeSensors()
+        placeSensors(args.fieldId)
 
         mapView.map.move(
             CameraPosition(azovPoint, 11.0f, 0.0f, 0.0f),
@@ -78,22 +96,53 @@ class FieldActivity: AppCompatActivity() {
     }
 
     private fun placeSensors() {
-        mapObjects.addPlacemark(azovPointSensor1, ImageProvider.fromResource(this, R.drawable.ic_dollar_pin) )
-        mapObjects.addPlacemark(azovPointSensor2, ImageProvider.fromResource(this, R.drawable.ic_dollar_pin) )
-        mapObjects.addPlacemark(azovPointSensor3, ImageProvider.fromResource(this, R.drawable.ic_dollar_pin) )
-        mapObjects.addPlacemark(azovPointSensor4, ImageProvider.fromResource(this, R.drawable.ic_dollar_pin) )
+        mapObjects.addPlacemark(
+            azovPointSensor1,
+            ImageProvider.fromResource(this, R.drawable.ic_dollar_pin)
+        )
+        mapObjects.addPlacemark(
+            azovPointSensor2,
+            ImageProvider.fromResource(this, R.drawable.ic_dollar_pin)
+        )
+        mapObjects.addPlacemark(
+            azovPointSensor3,
+            ImageProvider.fromResource(this, R.drawable.ic_dollar_pin)
+        )
+        mapObjects.addPlacemark(
+            azovPointSensor4,
+            ImageProvider.fromResource(this, R.drawable.ic_dollar_pin)
+        )
 
-        mapObjects.addCircle(Circle(azovPointSensor1, 3000f), Color.GREEN, 2f, Color.DKGRAY).apply { zIndex = 100.0f }
-        mapObjects.addCircle(Circle(azovPointSensor2, 3000f), Color.GREEN, 2f, Color.TRANSPARENT).apply { zIndex = 100.0f }
-        mapObjects.addCircle(Circle(azovPointSensor3, 3000f), Color.GREEN, 2f, Color.TRANSPARENT).apply { zIndex = 100.0f }
-        mapObjects.addCircle(Circle(azovPointSensor4, 3000f), Color.GREEN, 2f, Color.TRANSPARENT).apply { zIndex = 100.0f }
+        mapObjects.addCircle(Circle(azovPointSensor1, 3000f), Color.GREEN, 2f, Color.TRANSPARENT)
+            .apply { zIndex = 100.0f }
+        mapObjects.addCircle(Circle(azovPointSensor2, 3000f), Color.GREEN, 2f, Color.TRANSPARENT)
+            .apply { zIndex = 100.0f }
+        mapObjects.addCircle(Circle(azovPointSensor3, 3000f), Color.GREEN, 2f, Color.TRANSPARENT)
+            .apply { zIndex = 100.0f }
+        mapObjects.addCircle(Circle(azovPointSensor4, 3000f), Color.GREEN, 2f, Color.TRANSPARENT)
+            .apply { zIndex = 100.0f }
+    }
+
+    private fun placeSensors(fieldId: Int) {
+        val sensorList = when (fieldId) {
+            PrePopulateData.azovField.fieldId -> PrePopulateData.azovMapPoints
+            PrePopulateData.zernogradField.fieldId -> PrePopulateData.zernogradMapPoints
+            PrePopulateData.dubovskyField.fieldId -> PrePopulateData.dubovskyMapPoints
+            else -> PrePopulateData.azovMapPoints
+        }
+
+        sensorList.forEach {
+            mapObjects.addPlacemark(it, ImageProvider.fromResource(this, R.drawable.ic_dollar_pin))
+            mapObjects.addCircle(Circle(it, 3000f), Color.GREEN, 2f, Color.TRANSPARENT)
+                .apply { zIndex = 100.0f }
+        }
     }
 
     private fun provideChoseSeason(season: String) {
         viewModel.currentSeason.value =
             when (season) {
                 "Лето (от10 до 30 С)" -> Season.Summer
-                "Весна (от -5 до 10 С)"-> Season.Spring
+                "Весна (от -5 до 10 С)" -> Season.Spring
                 "Зима (от -20 до 10 С)" -> Season.Winter
                 "Осень (от -10 до 20 С)" -> Season.Autumn
                 else -> Season.Summer
@@ -113,9 +162,6 @@ class FieldActivity: AppCompatActivity() {
     }
 
     private fun showResults() {
-        FragmentRecomendations.show(supportFragmentManager)
+        FragmentRecommendations.show(supportFragmentManager)
     }
-
-
-
 }

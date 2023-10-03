@@ -37,6 +37,9 @@
         android:label="@string/create_field"
         tool:layout="@layout/fragment_create_field">
         <argument
+            android:name="fieldId"
+            app:argType="integer"/>
+        <argument
             android:name="culture"
             app:argType="string"/>
         <argument

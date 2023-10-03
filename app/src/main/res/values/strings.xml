@@ -5,6 +5,7 @@
     <string name="load_field">Создать поле</string>
     <string name="proceed">Далее</string>
     <string name="calculate">Произвести расчет</string>
+    <string name="chooseField">Выберите объект исследования</string>
     <string name="chooseSensor">Выберите тип датчика</string>
     <string name="chooseSituation">Выберите обстановку</string>
     <string name="choose_culture">Выберите культуру</string>

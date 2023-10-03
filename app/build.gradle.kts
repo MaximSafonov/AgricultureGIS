@@ -1,9 +1,8 @@
 plugins {
+    id("kotlin-kapt")
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
-
 }
 
 android {
@@ -47,10 +46,11 @@ dependencies {
     val retrofitVersion = "2.9.0"
     val room_version = "2.5.2"
 
-    kapt("androidx.room:room-compiler:$room_version")
 
     implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    kapt("android.arch.persistence.room:compiler:1.1.1")
+
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -66,7 +66,7 @@ dependencies {
 //    implementation("androidx.navigation:navigation-safe-args-gradle-plugin:$navVersion")
 
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
 
     implementation("com.google.code.gson:gson:2.10.1")

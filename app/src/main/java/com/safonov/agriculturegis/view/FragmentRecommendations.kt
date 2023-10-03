@@ -7,13 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.safonov.agriculturegis.R
+import com.safonov.agriculturegis.app.AgricultureApp
 import com.safonov.agriculturegis.databinding.FragmentRecommendationsBinding
 import com.safonov.agriculturegis.viewmodel.FieldViewModel
 import com.safonov.agriculturegis.viewmodel.baseViewModels
 
-class FragmentRecomendations: BottomSheetDialogFragment() {
+class FragmentRecommendations : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentRecommendationsBinding
-    private val viewModel by baseViewModels(::requireActivity) { FieldViewModel() }
+    private val viewModel by
+        baseViewModels(::requireActivity) {
+            FieldViewModel()
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +49,7 @@ class FragmentRecomendations: BottomSheetDialogFragment() {
 
     companion object {
         fun show(parent: FragmentManager) {
-            FragmentRecomendations().show(parent, null)
+            FragmentRecommendations().show(parent, null)
         }
     }
 }

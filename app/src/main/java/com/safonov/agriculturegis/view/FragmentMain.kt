@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatSpinner
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.safonov.agriculturegis.R
+import com.safonov.agriculturegis.data.db.PrePopulateData
 import com.safonov.agriculturegis.databinding.FragmentMainBinding
 
 class FragmentMain : Fragment(R.layout.fragment_main) {
@@ -27,6 +28,9 @@ class FragmentMain : Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
         binding.createFieldButton.setOnClickListener {
             val args = FieldActivityArgs(
+                fieldId = PrePopulateData.fieldList.first {
+                    it.name == binding.fieldList.selectedItem.toString()
+                }.fieldId,
                 culture = binding.agriculture.selectedItem.toString(),
                 sensor = binding.sensorList.selectedItem.toString(),
                 season = binding.situationList.selectedItem.toString(),
@@ -34,6 +38,13 @@ class FragmentMain : Fragment(R.layout.fragment_main) {
 
             findNavController().navigate(R.id.action_main_to_field, args.toBundle())
         }
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            PrePopulateData.fieldList.map { it.name })
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.fieldList.adapter = adapter
 
         loadSpinner(binding.sensorList, R.array.sensor_types)
         loadSpinner(binding.situationList, R.array.situation_types)

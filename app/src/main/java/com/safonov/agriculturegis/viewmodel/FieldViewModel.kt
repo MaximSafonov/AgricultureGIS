@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.safonov.agriculturegis.data.models.FieldModel
 import com.safonov.agriculturegis.data.FieldRepository
-import com.safonov.agriculturegis.data.FieldRepositoryImplementation
+import com.safonov.agriculturegis.data.db.entity.FieldDataEntity
 import com.safonov.agriculturegis.data.models.Recommendations
 import com.safonov.agriculturegis.data.models.Season
 import com.safonov.agriculturegis.data.utils.MeteoData
@@ -12,8 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class FieldViewModel private constructor(private val fieldRepository: FieldRepository) : ViewModel() {
-    constructor() : this(FieldRepositoryImplementation())
+class FieldViewModel() : ViewModel() {
 
     private val _field = MutableStateFlow<FieldModel?>(null)
     val field = _field.asStateFlow()
@@ -29,19 +28,28 @@ class FieldViewModel private constructor(private val fieldRepository: FieldRepos
     private val _fieldArea = MutableStateFlow(0.0)
     val fieldArea = _fieldArea.asStateFlow()
 
+    private val _fields = MutableStateFlow<List<FieldDataEntity>>(emptyList())
+    val fields = _fields.asStateFlow()
+
     fun loadField(cadNumber: String) {
         viewModelScope.launch {
-            kotlin.runCatching {
-                fieldRepository.searchField(cadNumber)
-            }.onSuccess { field ->
+//            kotlin.runCatching {
+//                fieldRepository.searchField(cadNumber)
+//            }.onSuccess { field ->
 //                _field.value = field ?: FieldModel.mock(cadNumber)
 
-            }
+//            }
         }
     }
 
     init {
         provideRecomendations(meteoData.value.evapoTransporation())
+
+        viewModelScope.launch {
+//            fieldRepository.allFields.collect {
+//                _fields.value = it
+//            }
+        }
     }
 
     private fun provideRecomendations(evapo: Double){
